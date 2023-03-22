@@ -2,21 +2,47 @@ package pesquisa;
 
 import java.util.ArrayList;
 
-public abstract class Pesqisador {
+public abstract class Pesquisador {
 	
 	public String nome;
-	public ArrayList<Pesqisador> supervisionados = new ArrayList<Pesqisador>();
-	public Pesqisador coordenador;
+	public ArrayList<Pesquisador> supervisionados;
+	public Pesquisador coordenador;
 	
-	Pesqisador(){};
+	Pesquisador(){};
 	
-	Pesqisador(String nome, ArrayList<Pesqisador> supervisionados ){
+	Pesquisador(String nome, Pesquisador coordenador ){
 		this.nome = nome;
-		//Eu acho que esse construtor tá muito errado
-		for(Pesqisador item : supervisionados) {
-			this.supervisionados = supervisionados;
-		}
+		this.coordenador = coordenador;
+		this.supervisionados = new ArrayList<>();		
 	};
+	
+	public String getNome() {
+		return this.nome;
+	}
+	
+	public abstract void addSupervisionado(String nome) throws ProfessorNaoTemSupervisionadoException;
+	
+	public abstract double getValor();
+	
+	public int getQtdSupervisionados() {
+				
+		int qtdAtual = this.supervisionados.size();
+		
+		
+		
+		return this.supervisionados.size();
+	}
+	
+	public Pesquisador getCoordenador() {
+		return this.coordenador;
+	}
+	
+	public void listarSuperiores() {
+		Pesquisador coordenadorAtual = this.getCoordenador();
+		if(coordenadorAtual != null) {
+			System.out.println(coordenadorAtual.getNome() + "\n");
+		}
+	}
 	
 	
 }
