@@ -6,8 +6,10 @@ public class TestMusicStore {
 		// TODO Auto-generated method stub
 
 		MusicStore loja = new MusicStore("Casa do Som");
+		loja.setOwnwer("Wolfgang Amadeus Mozart");
 		
 		loja.displayHoursOfOperation();
+		loja.displayOwner();
 	}
 
 }

@@ -4,21 +4,30 @@ import java.time.LocalTime;
 
 public class MusicStore {
 	
-	private String nome;
+	private String nomeLoja;
+	private String ownwer = "sem dono";
 	private LocalTime horaAbertura = LocalTime.parse("09:00");
 	private LocalTime horaFechamento = LocalTime.parse("21:00");
 	
 	
 	
+	public String getOwnwer() {
+		return ownwer;
+	}
+
+	public void setOwnwer(String ownwer) {
+		this.ownwer = ownwer;
+	}
+
 	public MusicStore(String nome) {		
-		this.nome = nome;
+		this.nomeLoja = nome;
 	}
 	
 	public String getNome() {
-		return nome;
+		return nomeLoja;
 	}
 	public void setNome(String nome) {
-		this.nome = nome;
+		this.nomeLoja = nome;
 	}
 	public LocalTime getHoraAbertura() {
 		return horaAbertura;
@@ -35,6 +44,10 @@ public class MusicStore {
 	
 	public void displayHoursOfOperation() {
 		System.out.println("Horário de funcionamento: das " + horaAbertura + " às " + horaFechamento);
+	}
+	
+	public void displayOwner() {
+		System.out.println("Propietário: " + this.getOwnwer());
 	}
 	
 	

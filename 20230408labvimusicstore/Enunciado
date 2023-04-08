@@ -18,3 +18,20 @@ Demonstração
 O que deve aparecer na tela após a execução deve ser similar a isso:
 Período:
 Diariamente das 9:00 - 21:00
+
+LabVII: MusicStore com um Dono
+Para esse exercício você adiciona uma variável de instância chamada “owner” e o método
+setOwner a MusicStore.
+Etapas
+1. Adicione a variável “owner” a MusicStore. O tipo deve ser String inicializado com
+"sem dono.".
+2. Adicione o método setOwner to MusicStore. Esse método deve modificar o valor
+da variável “owner”.
+3. Modifique TestMusicStore para mudar o nome do dono da loja.
+4. Compile os fontes de MusicStore e TestMusicStore.
+5. Execute TestMusicStore.
+Demonstração
+O que deve aparecer na tela após a execução deve ser similar a isso:
+Período:
+Diariamente das: 9:00 - 21:00
+Roberto, Proprietário 
