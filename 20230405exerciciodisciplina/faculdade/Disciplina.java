@@ -9,6 +9,14 @@ public class Disciplina {
 	private String nome;
 	private List<Aluno> alunosMatriculados = new ArrayList();
 	
+	
+	
+	public Disciplina(String codigo, String nome) {		
+		this.codigo = codigo;
+		this.nome = nome;
+		Faculdade.cadastraDisciplina(this);
+	}
+	
 	public String getCodigo() {
 		return codigo;
 	}
@@ -52,6 +60,22 @@ public class Disciplina {
 			for(Aluno aluno : alunosMatriculados) {
 				System.out.println("Nome: " + aluno.getNome() + ", matrícula: " + aluno.getMatricula());
 			}
+		}
+	}
+	
+	public boolean verificaMatriculaDeAluno(Aluno aluno) {
+		
+		return alunosMatriculados.contains(aluno);
+	}
+	
+	public void getSemestreIngressoAlunos() {
+		
+		if(alunosMatriculados == null) {
+			System.out.println("Não há alunos matriculados!");
+		}
+		else {
+			for(Aluno aluno : this.alunosMatriculados)
+				System.out.println(aluno.getNome() + " ingressou no semestre " + aluno.getSemestreDeIngresso());
 		}
 	}
 

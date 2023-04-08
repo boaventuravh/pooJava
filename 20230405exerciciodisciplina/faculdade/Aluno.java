@@ -8,7 +8,7 @@ public class Aluno {
 	private String nome;
 	private String matricula;
 	private String semestreDeIngresso;
-	private List<Disciplina> disciplinas = new ArrayList();
+	private List<Disciplina> disciplinas = new ArrayList<Disciplina>();
 	
 	public String getNome() {
 		return nome;
