@@ -1,0 +1,20 @@
+LabVI: A Classe MusicStore
+Para esse exercício você vai implementar a primeira versão de um tipo abstrato de dados
+definido pelo programador de nome MusicStore. Essa Classe será usada exercícios
+subsequentes.
+Etapas
+1. Monte e implemente o MusicStore como uma classe pública com um método
+público de nome displayHoursOfOperation. Esse método imprime na tela o
+período diário de funcionamento de uma loja de música(discos).
+
+2. Monte e implemente o TestMusicStore como uma classe pública com o método
+main que execute as seguintes tarefas:
+• Criar uma instância do MusicStore
+• Invocar o método displayHoursOfOperation para período diário de
+funcionamento
+3. Compile os fontes de MusicStore e TestMusicStore.
+4. Execute TestMusicStore.
+Demonstração
+O que deve aparecer na tela após a execução deve ser similar a isso:
+Período:
+Diariamente das 9:00 - 21:00
