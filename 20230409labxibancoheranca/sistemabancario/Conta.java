@@ -1,0 +1,38 @@
+package sistemabancario;
+
+public abstract class Conta {
+	
+	protected double saldo;
+	private String numero;
+	
+	public Conta (double saldoInicial, String numero) {
+		this.saldo = saldoInicial;
+		this.numero = numero;
+	}
+	
+	public void depositaValor (double valor) {
+		if(valor > 0) {
+			this.saldo += valor;
+			System.out.println("Valor depositado com sucesso!");
+		}
+		else {
+			System.out.println("Valor inválido!");
+		}
+	}
+	
+	public void sacaValor(double valor) {
+		if(valor > this.saldo)
+			System.out.println("Operação inválida!");
+		else {
+			this.saldo -= valor;
+			System.out.println("Valor sacado com sucesso!");
+		}
+	}
+
+	public double getSaldo() {
+		return saldo;
+	}
+
+	public void atualizaSaldoMensal() {}
+
+}
