@@ -5,6 +5,14 @@ public abstract class Conta {
 	protected double saldo;
 	private String numero;
 	
+	public String getNumero() {
+		return numero;
+	}
+
+	public void setNumero(String numero) {
+		this.numero = numero;
+	}
+
 	public Conta (double saldoInicial, String numero) {
 		this.saldo = saldoInicial;
 		this.numero = numero;
