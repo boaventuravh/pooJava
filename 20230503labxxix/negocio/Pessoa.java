@@ -25,12 +25,8 @@ public abstract class Pessoa {
 	}
 	public Pessoa getChefe() {
 		return chefe;
-	}
+	}	
 	
-	public List<Pessoa> getSuperiores() {
-		return superiores;
-	}
-
 	public abstract List<Pessoa> getListaEmpregadosAssociados();
 	
 	public abstract List<Pessoa> getListaSuperiores();
