@@ -12,6 +12,12 @@ public class Principal {
 		Banco.sacaValorViaNumeroConta("0001", 30);
 		Banco.depositaViaNome("Carlos", 34);
 		System.out.println(cliente1.getConta().getSaldo());
+		
+		Banco.atualizaTodasContas();
+		
+		System.out.println(cliente1.getConta().getSaldo());
+		
+		System.out.println(Banco.getValorTotal());
 
 	}
 
