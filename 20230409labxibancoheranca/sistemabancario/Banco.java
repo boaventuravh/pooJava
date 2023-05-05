@@ -21,6 +21,12 @@ public class Banco {
 		}
 	}
 	
+	public static void atualizaTodasContas() {
+		for(Cliente cliente : clientes) {
+			cliente.getConta().atualizaSaldoMensal();
+		}
+	}
+	
 	public static void depositaViaNumeroConta(String numero, double valor) {
 		
 		for(Cliente cliente : clientes) {
