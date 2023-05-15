@@ -17,7 +17,7 @@ public class Principal {
 		
 		System.out.println(cliente1.getConta().getSaldo());
 		
-		System.out.println(Banco.getValorTotal());
+		System.out.println("Valor total guardado no banco" + Banco.getValorTotal());
 
 	}
 
