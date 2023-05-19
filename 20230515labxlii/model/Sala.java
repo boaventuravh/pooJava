@@ -2,16 +2,15 @@ package model;
 
 public abstract class Sala {
 	
-	private String nome;
+	private String codSala;
 	private int qtdeLugares;
 	
-	public Sala(String nome) {
-		this.nome = nome;
+	public Sala(String codSala) {
+		this.codSala = codSala;
 	}
 	
 	public Sala() {}
 	
-	public abstract boolean vendeBilhete();
 
 	public int getQtdeLugares() {
 		return qtdeLugares;
