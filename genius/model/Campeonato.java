@@ -54,6 +54,10 @@ public class Campeonato {
 		this.jogadoresCampeonato = jogadoresCampeonato;
 	}
 	
+	public void addJogadorCampeonato(Jogador jogador) {
+		this.jogadoresCampeonato.add(jogador);
+	}
+	
 	public int getDificuldade() {
 		return dificuldade;
 	}
