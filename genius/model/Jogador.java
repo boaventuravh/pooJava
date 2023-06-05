@@ -9,7 +9,7 @@ public class Jogador {
 	private String apelido;
 	private int pontos;
 	private List<Jogada> jogadas;
-	private boolean ativo;
+	private boolean acertou;
 	
 	public Jogador() {}
 	
@@ -17,7 +17,7 @@ public class Jogador {
 		this.nome = nome;
 		this.apelido = apelido;
 		pontos = 0;
-		ativo = true;
+		acertou = true;
 		jogadas = new ArrayList<Jogada>();
 	}
 	
@@ -54,11 +54,11 @@ public class Jogador {
 	}
 	
 	public boolean isAtivo() {
-		return ativo;
+		return acertou;
 	}
 	
 	public void setAtivo(boolean ativo) {
-		this.ativo = ativo;
+		this.acertou = ativo;
 	}
 	
 }

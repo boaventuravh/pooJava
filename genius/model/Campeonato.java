@@ -10,13 +10,15 @@ public class Campeonato {
 	private LocalDateTime data;
 	private List<Rodada> rodadas;
 	private List<Jogador> jogadoresCampeonato;
+	private int qtdJogadores;
 	private int dificuldade;
 	private int velocidade;
 	
-	public Campeonato(String titulo, int dificuldade, int velocidade) {
+	public Campeonato(String titulo, int qtdJogadores, int dificuldade, int velocidade) {
 		this.titulo = titulo;
 		this.data = LocalDateTime.now();
-		this.jogadoresCampeonato = new ArrayList<Jogador>();
+		this.jogadoresCampeonato = new ArrayList<Jogador>(qtdJogadores);
+		this.qtdJogadores = qtdJogadores;
 		this.rodadas = new ArrayList<Rodada>();
 		this.dificuldade = dificuldade;
 		this.velocidade = velocidade;
@@ -57,7 +59,15 @@ public class Campeonato {
 	public void addJogadorCampeonato(Jogador jogador) {
 		this.jogadoresCampeonato.add(jogador);
 	}
-	
+
+	public int getQtdJogadores() {
+		return qtdJogadores;
+	}
+
+	public void setQtdJogadores(int qtdJogadores) {
+		this.qtdJogadores = qtdJogadores;
+	}
+
 	public int getDificuldade() {
 		return dificuldade;
 	}

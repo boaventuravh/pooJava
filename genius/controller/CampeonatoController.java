@@ -13,9 +13,9 @@ public class CampeonatoController {
 	
 	
 
-	public void iniciarCampeonato(Campeonato campeonato, String titulo, int dificuldade, int velocidade) {
+	public void iniciarCampeonato(Campeonato campeonato, String titulo, int qtdJogadores, int dificuldade, int velocidade) {
 		
-		campeonato = new Campeonato(titulo, dificuldade, velocidade);
+		campeonato = new Campeonato(titulo, qtdJogadores, dificuldade, velocidade);
 		
 	}
 	
@@ -26,11 +26,9 @@ public class CampeonatoController {
 		
 	}
 	
-	public void addJogador(Campeonato campeonato, ArrayList<Jogador> jogadores) {
+	public void addJogador(Campeonato campeonato, Jogador jogador) {
 		
-		for(int index = jogadores.size(); index>=0; index--) {
-			campeonato.addJogadorCampeonato(jogadores.get(index));
-		}
+		campeonato.addJogadorCampeonato(jogador);
 	}
 	
 	

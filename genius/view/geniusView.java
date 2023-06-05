@@ -29,7 +29,7 @@ public class geniusView {
 	private Campeonato campeonato;
 	private JTextField txtNomeJogador;
 	private JTextField txtApelidoJogador;
-	private int countJogador;
+	private int numeroJogador;
 	/**
 	 * Launch the application.
 	 */
@@ -161,7 +161,8 @@ public class geniusView {
 				else if (rbVelocidade3.isSelected())
 					velocidade = 3;
 				
-				campeonato = new Campeonato(titulo, dificuldade, velocidade);
+				campeonato = new Campeonato(titulo, qtdJogadores, dificuldade, velocidade);
+				System.out.println("Quantidade de jogadores: " + campeonato.getQtdJogadores());
 				tabbedPane.setSelectedIndex(1);
 				
 				
@@ -197,22 +198,35 @@ public class geniusView {
 		pnlRegistroJogadores.add(txtApelidoJogador);
 		txtApelidoJogador.setColumns(10);
 		
-		JLabel lblNumeracaoJogador = new JLabel("Jogador: 1");
+		
+		numeroJogador= 1;
+		JLabel lblNumeracaoJogador = new JLabel("Jogador: " + numeroJogador);
 		lblNumeracaoJogador.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblNumeracaoJogador.setBounds(322, 69, 100, 14);
 		pnlRegistroJogadores.add(lblNumeracaoJogador);
 		
 		//HERE
-		countJogador = 2;
 		JButton btnRegistrarJogador = new JButton("Registrar");
 		btnRegistrarJogador.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblNumeracaoJogador.setText("Jogador: " + countJogador);
+				
 				Jogador jogador = new Jogador(txtNomeJogador.getText(), txtApelidoJogador.getText());
 				campeonato.addJogadorCampeonato(jogador);
-				countJogador++;
 				txtNomeJogador.setText(null);
 				txtApelidoJogador.setText(null);
+				
+				
+				if(numeroJogador < campeonato.getQtdJogadores()) {					
+					numeroJogador++;
+					lblNumeracaoJogador.setText("Jogador: " + numeroJogador);
+				}
+				else {
+					tabbedPane.setSelectedIndex(2);
+					for (Jogador j : campeonato.getJogadoresCampeonato()) {
+						System.out.println("Jogador " + campeonato.getJogadoresCampeonato().indexOf(j) + " " + j.getNome());
+					}
+				}
+				
 				
 			}
 		});
