@@ -11,21 +11,32 @@ public class CampeonatoController {
 	
 	private Campeonato campeonato;
 	
+	public CampeonatoController() {}
 	
+	public CampeonatoController(Campeonato campeonato) {
+		this.campeonato = campeonato;
+	}
 
-	public void iniciarCampeonato(Campeonato campeonato, String titulo, int qtdJogadores, int dificuldade, int velocidade) {
+	public void iniciarCampeonato(String titulo, int qtdJogadores, int dificuldade, int velocidade) {
 		
-		campeonato = new Campeonato(titulo, qtdJogadores, dificuldade, velocidade);
+		this.campeonato = new Campeonato(titulo, qtdJogadores, dificuldade, velocidade);
 		
 	}
 	
-	public Jogador registrarJogador(String nome, String apelido) {
+	public void registrarJogador(String nome, String apelido) {
 		
 		Jogador jogador = new Jogador(nome, apelido);
-		return jogador;
-		
+		this.campeonato.addJogadorCampeonato(jogador);		
 	}
 	
+	public Campeonato getCampeonato() {
+		return campeonato;
+	}
+
+	public void setCampeonato(Campeonato campeonato) {
+		this.campeonato = campeonato;
+	}
+
 	public void addJogador(Campeonato campeonato, Jogador jogador) {
 		
 		campeonato.addJogadorCampeonato(jogador);

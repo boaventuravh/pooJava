@@ -11,14 +11,16 @@ public class Jogador {
 	private List<Jogada> jogadas;
 	private boolean acertou;
 	
-	public Jogador() {}
+	public Jogador() {
+		this.jogadas = new ArrayList<Jogada>();
+	}
 	
 	public Jogador(String nome, String apelido) {
 		this.nome = nome;
 		this.apelido = apelido;
 		pontos = 0;
 		acertou = true;
-		jogadas = new ArrayList<Jogada>();
+		this.jogadas = new ArrayList<Jogada>();
 	}
 	
 	public String getNome() {
@@ -61,4 +63,9 @@ public class Jogador {
 		this.acertou = ativo;
 	}
 	
+	public void addJogada(Jogada jogada) {
+		System.out.println();
+		this.jogadas.add(jogada);
+		
+	}
 }

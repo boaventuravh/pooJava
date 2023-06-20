@@ -17,13 +17,15 @@ public class Campeonato {
 	public Campeonato(String titulo, int qtdJogadores, int dificuldade, int velocidade) {
 		this.titulo = titulo;
 		this.data = LocalDateTime.now();
-		this.jogadoresCampeonato = new ArrayList<Jogador>(qtdJogadores);
+		this.jogadoresCampeonato = new ArrayList<Jogador>();
 		this.qtdJogadores = qtdJogadores;
 		this.rodadas = new ArrayList<Rodada>();
 		this.dificuldade = dificuldade;
 		this.velocidade = velocidade;
 	}
 	
+	public Campeonato() {}
+
 	public String getTitulo() {
 		return titulo;
 	}
@@ -82,6 +84,25 @@ public class Campeonato {
 	
 	public void setVelocidade(int velocidade) {
 		this.velocidade = velocidade;
+	}
+
+	public void addRodada(Rodada rodada) {
+		this.rodadas.add(rodada);
+		
+	}
+	
+	public boolean isJogadaCorreta(Jogador jogador, String retorno) {
+		Jogada jogada = jogador.getJogadas().get(0);
+		if(jogada.getSequencia().equalsIgnoreCase(retorno)) {
+			jogador.setPontos(jogador.getPontos() + 1);
+			System.out.println("Jogador " + jogador.getNome() + " acertou!");
+			return true;
+		}
+		else {
+			System.out.println("Jogador "  + jogador.getNome() + " errou!" );			
+			return false;
+		}
+		
 	}
 	
 }

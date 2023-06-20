@@ -8,16 +8,25 @@ import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import controller.CampeonatoController;
 import model.Campeonato;
+import model.Jogada;
 import model.Jogador;
+import model.Rodada;
 
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.concurrent.CompletableFuture;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
+import javax.swing.SwingConstants;
+import javax.swing.JTable;
+import javax.swing.ImageIcon;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
 
 public class geniusView {
 
@@ -26,10 +35,14 @@ public class geniusView {
 	private ButtonGroup bgQtdeJogadores = new ButtonGroup();
 	private ButtonGroup bgDificuldade = new ButtonGroup();
 	private ButtonGroup bgVelocidade =  new ButtonGroup();
-	private Campeonato campeonato;
 	private JTextField txtNomeJogador;
-	private JTextField txtApelidoJogador;
-	private int numeroJogador;
+	private JTextField txtApelidoJogador;	
+	
+	private Campeonato campeonato;
+	
+	int indexJogadorRodada = 0;
+	int indexRodada = 0;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -58,7 +71,7 @@ public class geniusView {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 783, 479);
+		frame.setBounds(100, 100, 980, 708);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
@@ -141,30 +154,36 @@ public class geniusView {
 		JButton btnIniciarCampeonato = new JButton("Iniciar");
 		btnIniciarCampeonato.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
 				String titulo = txtTituloCampeonato.getText();
-				int qtdJogadores = 2;
+				int qtdJogadores = 0;
 				int dificuldade = 1;
 				int velocidade = 1;
 				
-				if(rbQtdJogadores3.isSelected())
+				
+				if(rbQtdJogadores2.isSelected())
+					qtdJogadores = 2;
+				else if(rbQtdJogadores3.isSelected())
 					qtdJogadores = 3;
 				else if(rbQtdJogadores4.isSelected())
 					qtdJogadores = 4;
 				
-				if (rbDificuldade2.isSelected())
+				if (rbDificuldade1.isSelected())
+					dificuldade = 1;
+				else if (rbDificuldade2.isSelected())
 					dificuldade = 2;
 				else if (rbDificuldade3.isSelected())
 					dificuldade = 3;
 				
-				if (rbVelocidade2.isSelected())
+				if (rbVelocidade1.isSelected())
+					velocidade = 1;
+				else if (rbVelocidade2.isSelected())
 					velocidade = 2;
 				else if (rbVelocidade3.isSelected())
 					velocidade = 3;
 				
-				campeonato = new Campeonato(titulo, qtdJogadores, dificuldade, velocidade);
-				System.out.println("Quantidade de jogadores: " + campeonato.getQtdJogadores());
-				tabbedPane.setSelectedIndex(1);
-				
+				registrarCampeonato(titulo, qtdJogadores, dificuldade, velocidade);
+				tabbedPane.setSelectedIndex(1);				
 				
 			}
 		});
@@ -199,34 +218,37 @@ public class geniusView {
 		txtApelidoJogador.setColumns(10);
 		
 		
-		numeroJogador= 1;
-		JLabel lblNumeracaoJogador = new JLabel("Jogador: " + numeroJogador);
+		JLabel lblNumeracaoJogador = new JLabel("Jogador: 1");
 		lblNumeracaoJogador.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblNumeracaoJogador.setBounds(322, 69, 100, 14);
 		pnlRegistroJogadores.add(lblNumeracaoJogador);
 		
-		//HERE
 		JButton btnRegistrarJogador = new JButton("Registrar");
 		btnRegistrarJogador.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				Jogador jogador = new Jogador(txtNomeJogador.getText(), txtApelidoJogador.getText());
+				Jogador jogador = new Jogador();
+				jogador.setNome(txtNomeJogador.getText());
+				jogador.setApelido(txtApelidoJogador.getText());
+
 				campeonato.addJogadorCampeonato(jogador);
-				txtNomeJogador.setText(null);
-				txtApelidoJogador.setText(null);
 				
 				
-				if(numeroJogador < campeonato.getQtdJogadores()) {					
-					numeroJogador++;
-					lblNumeracaoJogador.setText("Jogador: " + numeroJogador);
-				}
-				else {
+				
+				if(campeonato.getJogadoresCampeonato().size() <= campeonato.getQtdJogadores() - 1)
+				{
+					txtNomeJogador.setText(null);
+					txtApelidoJogador.setText(null);
+					lblNumeracaoJogador.setText("Jogador: " + (campeonato.getJogadoresCampeonato().size() + 1) );
+				}				
+				
+				else 
+				{
 					tabbedPane.setSelectedIndex(2);
-					for (Jogador j : campeonato.getJogadoresCampeonato()) {
-						System.out.println("Jogador " + campeonato.getJogadoresCampeonato().indexOf(j) + " " + j.getNome());
-					}
+					adicionarJogadaJogador(campeonato.getJogadoresCampeonato().get(indexJogadorRodada));
+//					
 				}
-				
+							
 				
 			}
 		});
@@ -235,8 +257,135 @@ public class geniusView {
 		
 		
 		
-		JPanel panel_2 = new JPanel();
-		tabbedPane.addTab("New tab", null, panel_2, null);
-		panel_2.setLayout(null);
+		JPanel pnlJogo = new JPanel();
+		tabbedPane.addTab("Jogo", null, pnlJogo, null);
+		pnlJogo.setLayout(null);
+		
+		JLabel lblTabuleiro = new JLabel("New label");
+		lblTabuleiro.setBounds(0, 0, 959, 641);
+		lblTabuleiro.setIcon(new ImageIcon(geniusView.class.getResource("/files/00Neutro.png")));
+		lblTabuleiro.setHorizontalAlignment(SwingConstants.CENTER);
+		pnlJogo.add(lblTabuleiro);
+		
+		JButton btnVerde = new JButton("");
+		btnVerde.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+					
+				lblTabuleiro.setIcon(new ImageIcon(geniusView.class.getResource(
+					(btnVerde.getModel().isPressed()) ? "/files/01VerdePressionado.png" : "/files/00Neutro.png")));
+							
+			}
+		});
+		btnVerde.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Verde clicado");
+			}
+		});
+		btnVerde.setBounds(212, 53, 244, 246);
+		btnVerde.setOpaque(false);
+		btnVerde.setContentAreaFilled(false);
+		btnVerde.setBorderPainted(false);
+		pnlJogo.add(btnVerde);
+		
+		JButton btnAmarelo = new JButton("");
+		btnAmarelo.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				
+				lblTabuleiro.setIcon(new ImageIcon(geniusView.class.getResource(
+						(btnAmarelo.getModel().isPressed()) ? "/files/02AmareloPressionado.png" : "/files/00Neutro.png")));
+				
+			}
+		});
+		btnAmarelo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Amarelo clicado");
+			}
+		});
+		btnAmarelo.setBounds(488, 53, 244, 246);
+		btnAmarelo.setOpaque(false);
+		btnAmarelo.setContentAreaFilled(false);
+		btnAmarelo.setBorderPainted(false);
+		pnlJogo.add(btnAmarelo);
+		
+		JButton btnAzul = new JButton("");
+		btnAzul.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				
+				lblTabuleiro.setIcon(new ImageIcon(geniusView.class.getResource(
+						(btnAzul.getModel().isPressed()) ? "/files/03AzulPressionado.png" : "/files/00Neutro.png")));
+				
+			}
+		});
+		btnAzul.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Azul clicado");
+			}
+		});
+		btnAzul.setBounds(488, 341, 244, 246);
+		btnAzul.setOpaque(false);
+		btnAzul.setContentAreaFilled(false);
+		btnAzul.setBorderPainted(false);
+		pnlJogo.add(btnAzul);
+		
+		JButton btnVermelho = new JButton("");
+		btnVermelho.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				
+				lblTabuleiro.setIcon(new ImageIcon(geniusView.class.getResource(
+						(btnVermelho.getModel().isPressed()) ? "/files/04VermelhoPressionado.png" : "/files/00Neutro.png")));
+				
+			}
+		});
+		btnVermelho.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Vermelho clicado");
+			}
+		});
+		btnVermelho.setBounds(212, 341, 244, 246);
+		btnVermelho.setOpaque(false);
+		btnVermelho.setContentAreaFilled(false);
+		btnVermelho.setBorderPainted(false);
+		pnlJogo.add(btnVermelho);
+		
+		JPanel pnlRelatorio = new JPanel();
+		tabbedPane.addTab("New tab", null, pnlRelatorio, null);
+		pnlRelatorio.setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("RELATÓRIO");
+		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setBounds(300, 27, 136, 53);
+		pnlRelatorio.add(lblNewLabel);
+	}
+	
+	public void registrarCampeonato(String titulo, int qtdJogadores, int dificuldade, int velocidade) {
+				
+		campeonato = new Campeonato(titulo, qtdJogadores, dificuldade, velocidade);
+		
+	}
+	
+	public void registrarJogadores(Jogador jogador) {
+		
+		campeonato.addJogadorCampeonato(jogador);
+		
+	}
+	
+	public void adicionarRodada(Rodada rodada) {
+		campeonato.addRodada(rodada);
+	}
+	
+	public void aconteceJogada(Jogador jogador, boolean resultado) {
+		if(resultado == true)
+			jogador.setPontos(jogador.getPontos() + 1);
+		else
+			jogador.setAtivo(false);
+	}
+	
+	
+	public void adicionarJogadaJogador(Jogador jogador) {
+		Jogada jogada = new Jogada("Acertei");
+		System.out.println("Jogador " + campeonato.getJogadoresCampeonato().get(indexJogadorRodada).getNome() + " iniciou");
+		campeonato.getJogadoresCampeonato().get(indexJogadorRodada).addJogada(jogada);
+		
 	}
 }
