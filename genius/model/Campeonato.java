@@ -91,18 +91,18 @@ public class Campeonato {
 		
 	}
 	
-	public boolean isJogadaCorreta(Jogador jogador, String retorno) {
-		Jogada jogada = jogador.getJogadas().get(0);
-		if(jogada.getSequencia().equalsIgnoreCase(retorno)) {
-			jogador.setPontos(jogador.getPontos() + 1);
-			System.out.println("Jogador " + jogador.getNome() + " acertou!");
-			return true;
-		}
-		else {
-			System.out.println("Jogador "  + jogador.getNome() + " errou!" );			
-			return false;
-		}
-		
-	}
+//	public boolean isJogadaCorreta(Jogador jogador, String retorno) {
+//		Jogada jogada = jogador.getJogadas().get(0);
+//		if(jogada.getSequencia().equalsIgnoreCase(retorno)) {
+//			jogador.setPontos(jogador.getPontos() + 1);
+//			System.out.println("Jogador " + jogador.getNome() + " acertou!");
+//			return true;
+//		}
+//		else {
+//			System.out.println("Jogador "  + jogador.getNome() + " errou!" );			
+//			return false;
+//		}
+//		
+//	}
 	
 }

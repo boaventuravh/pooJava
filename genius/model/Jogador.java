@@ -8,19 +8,13 @@ public class Jogador {
 	private String nome;
 	private String apelido;
 	private int pontos;
-	private List<Jogada> jogadas;
-	private boolean acertou;
-	
-	public Jogador() {
-		this.jogadas = new ArrayList<Jogada>();
-	}
+	private Sequencia sequencia;
 	
 	public Jogador(String nome, String apelido) {
 		this.nome = nome;
 		this.apelido = apelido;
+		this.sequencia = new Sequencia();
 		pontos = 0;
-		acertou = true;
-		this.jogadas = new ArrayList<Jogada>();
 	}
 	
 	public String getNome() {
@@ -43,29 +37,11 @@ public class Jogador {
 		return pontos;
 	}
 	
-	public void setPontos(int pontos) {
-		this.pontos = pontos;
-	}
-	
-	public List<Jogada> getJogadas() {
-		return jogadas;
-	}
-	
-	public void setJogadas(List<Jogada> jogadas) {
-		this.jogadas = jogadas;
-	}
-	
-	public boolean isAtivo() {
-		return acertou;
-	}
-	
-	public void setAtivo(boolean ativo) {
-		this.acertou = ativo;
-	}
-	
-	public void addJogada(Jogada jogada) {
-		System.out.println();
-		this.jogadas.add(jogada);
-		
+	public void addPonto() {
+		this.pontos += 1;
+	}	
+
+	public Sequencia getSequencia() {
+		return sequencia;
 	}
 }

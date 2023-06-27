@@ -4,14 +4,14 @@ public class Jogada {
 	
 	private double tempoJogada;
 	private boolean acertou;
-	private String sequencia; 
+	private Sequencia sequencia; 
 	
 	public Jogada() {
 		tempoJogada = 0;
 		acertou = true;
 	}
 	
-	public Jogada(String sequencia) {
+	public Jogada(Sequencia sequencia) {
 		tempoJogada = 0;
 		acertou = true;
 		this.sequencia = sequencia;
@@ -33,11 +33,11 @@ public class Jogada {
 		this.acertou = resultado;
 	}
 
-	public String getSequencia() {
+	public Sequencia getSequencia() {
 		return sequencia;
 	}
 
-	public void setSequencia(String sequencia) {
+	public void setSequencia(Sequencia sequencia) {
 		this.sequencia = sequencia;
 	}
 	

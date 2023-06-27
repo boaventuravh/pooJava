@@ -13,12 +13,17 @@ import model.Campeonato;
 import model.Jogada;
 import model.Jogador;
 import model.Rodada;
+import model.Sequencia;
 
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.CompletableFuture;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
@@ -31,16 +36,23 @@ import javax.swing.event.ChangeEvent;
 public class geniusView {
 
 	private JFrame frame;
+	private JLabel lblTabuleiro;
 	private JTextField txtTituloCampeonato;
+	private JTabbedPane tabbedPane;
+	private JLabel lblJogadorAtual;
 	private ButtonGroup bgQtdeJogadores = new ButtonGroup();
 	private ButtonGroup bgDificuldade = new ButtonGroup();
 	private ButtonGroup bgVelocidade =  new ButtonGroup();
 	private JTextField txtNomeJogador;
-	private JTextField txtApelidoJogador;	
+	private JTextField txtApelidoJogador;
+	private JLabel lblTextoRelatorio;
 	
 	private Campeonato campeonato;
+	private Sequencia sequencia;
+	private String relatorio = "";
 	
-	int indexJogadorRodada = 0;
+	int indexJogador = 0;
+	int indexSequencia = 0;
 	int indexRodada = 0;
 	
 	/**
@@ -71,10 +83,10 @@ public class geniusView {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 980, 708);
+		frame.setBounds(100, 100, 1259, 708);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		frame.getContentPane().add(tabbedPane, BorderLayout.CENTER);
 		
 		JPanel pnlMenuPrincipal = new JPanel();
@@ -223,17 +235,20 @@ public class geniusView {
 		lblNumeracaoJogador.setBounds(322, 69, 100, 14);
 		pnlRegistroJogadores.add(lblNumeracaoJogador);
 		
+		lblTabuleiro = new JLabel("");
+		lblTabuleiro.setBounds(0, 0, 959, 641);
+		lblTabuleiro.setIcon(new ImageIcon(geniusView.class.getResource("/files/00Neutro.png")));
+		lblTabuleiro.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		
 		JButton btnRegistrarJogador = new JButton("Registrar");
 		btnRegistrarJogador.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				Jogador jogador = new Jogador();
-				jogador.setNome(txtNomeJogador.getText());
-				jogador.setApelido(txtApelidoJogador.getText());
-
+				Jogador jogador = new Jogador(txtNomeJogador.getText(), txtApelidoJogador.getText());
+				
 				campeonato.addJogadorCampeonato(jogador);
-				
-				
+								
 				
 				if(campeonato.getJogadoresCampeonato().size() <= campeonato.getQtdJogadores() - 1)
 				{
@@ -243,10 +258,15 @@ public class geniusView {
 				}				
 				
 				else 
-				{
+				{					
+					sequencia = new Sequencia();
+					
+					lblJogadorAtual.setText("Jogador: " + campeonato.getJogadoresCampeonato().get(indexJogador).getNome());
+					
 					tabbedPane.setSelectedIndex(2);
-					adicionarJogadaJogador(campeonato.getJogadoresCampeonato().get(indexJogadorRodada));
-//					
+					
+					playSequencia();
+					
 				}
 							
 				
@@ -261,10 +281,6 @@ public class geniusView {
 		tabbedPane.addTab("Jogo", null, pnlJogo, null);
 		pnlJogo.setLayout(null);
 		
-		JLabel lblTabuleiro = new JLabel("New label");
-		lblTabuleiro.setBounds(0, 0, 959, 641);
-		lblTabuleiro.setIcon(new ImageIcon(geniusView.class.getResource("/files/00Neutro.png")));
-		lblTabuleiro.setHorizontalAlignment(SwingConstants.CENTER);
 		pnlJogo.add(lblTabuleiro);
 		
 		JButton btnVerde = new JButton("");
@@ -279,6 +295,10 @@ public class geniusView {
 		btnVerde.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Verde clicado");
+				campeonato.getJogadoresCampeonato().get(indexJogador).getSequencia().getSequenciaCores().add(1);
+				if(campeonato.getJogadoresCampeonato().get(indexJogador).getSequencia().getSequenciaCores().size() >= sequencia.getSequenciaCores().size())
+					comparaSequencia();
+				
 			}
 		});
 		btnVerde.setBounds(212, 53, 244, 246);
@@ -299,6 +319,9 @@ public class geniusView {
 		btnAmarelo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Amarelo clicado");
+				campeonato.getJogadoresCampeonato().get(indexJogador).getSequencia().getSequenciaCores().add(2);
+				if(campeonato.getJogadoresCampeonato().get(indexJogador).getSequencia().getSequenciaCores().size() >= sequencia.getSequenciaCores().size())
+					comparaSequencia();
 			}
 		});
 		btnAmarelo.setBounds(488, 53, 244, 246);
@@ -319,6 +342,9 @@ public class geniusView {
 		btnAzul.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Azul clicado");
+				campeonato.getJogadoresCampeonato().get(indexJogador).getSequencia().getSequenciaCores().add(3);
+				if(campeonato.getJogadoresCampeonato().get(indexJogador).getSequencia().getSequenciaCores().size() >= sequencia.getSequenciaCores().size())
+					comparaSequencia();
 			}
 		});
 		btnAzul.setBounds(488, 341, 244, 246);
@@ -339,6 +365,9 @@ public class geniusView {
 		btnVermelho.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Vermelho clicado");
+				campeonato.getJogadoresCampeonato().get(indexJogador).getSequencia().getSequenciaCores().add(4);
+				if(campeonato.getJogadoresCampeonato().get(indexJogador).getSequencia().getSequenciaCores().size() >= sequencia.getSequenciaCores().size())
+					comparaSequencia();
 			}
 		});
 		btnVermelho.setBounds(212, 341, 244, 246);
@@ -347,15 +376,30 @@ public class geniusView {
 		btnVermelho.setBorderPainted(false);
 		pnlJogo.add(btnVermelho);
 		
+		lblJogadorAtual = new JLabel("Jogador: ");
+		lblJogadorAtual.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblJogadorAtual.setHorizontalAlignment(SwingConstants.LEFT);
+		lblJogadorAtual.setBounds(969, 53, 259, 103);
+		lblJogadorAtual.setVisible(true);
+		pnlJogo.add(lblJogadorAtual);
+		
 		JPanel pnlRelatorio = new JPanel();
-		tabbedPane.addTab("New tab", null, pnlRelatorio, null);
+		tabbedPane.addTab("Relatório", null, pnlRelatorio, null);
 		pnlRelatorio.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("RELATÓRIO");
-		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setBounds(300, 27, 136, 53);
-		pnlRelatorio.add(lblNewLabel);
+		JLabel lblTituloRelatorio = new JLabel("RELATÓRIO");
+		lblTituloRelatorio.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lblTituloRelatorio.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTituloRelatorio.setBounds(300, 27, 136, 53);
+		pnlRelatorio.add(lblTituloRelatorio);		
+		
+		lblTextoRelatorio = new JLabel("-------");
+		lblTextoRelatorio.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblTextoRelatorio.setVerticalAlignment(SwingConstants.TOP);
+		lblTextoRelatorio.setHorizontalAlignment(SwingConstants.LEFT);
+		lblTextoRelatorio.setBounds(60, 117, 733, 343);
+		pnlRelatorio.add(lblTextoRelatorio);
+		
 	}
 	
 	public void registrarCampeonato(String titulo, int qtdJogadores, int dificuldade, int velocidade) {
@@ -374,18 +418,128 @@ public class geniusView {
 		campeonato.addRodada(rodada);
 	}
 	
-	public void aconteceJogada(Jogador jogador, boolean resultado) {
-		if(resultado == true)
-			jogador.setPontos(jogador.getPontos() + 1);
-		else
-			jogador.setAtivo(false);
-	}
-	
-	
-	public void adicionarJogadaJogador(Jogador jogador) {
-		Jogada jogada = new Jogada("Acertei");
-		System.out.println("Jogador " + campeonato.getJogadoresCampeonato().get(indexJogadorRodada).getNome() + " iniciou");
-		campeonato.getJogadoresCampeonato().get(indexJogadorRodada).addJogada(jogada);
+	public void comparaSequencia() {
+		
+		Timer timer = new Timer();
+		
+		timer.schedule(new TimerTask() {
+			
+			@Override
+			public void run() {
+				if(sequencia.getSequenciaCores().equals(campeonato.getJogadoresCampeonato().get(indexJogador).getSequencia().getSequenciaCores())) {
+					campeonato.getJogadoresCampeonato().get(indexJogador).addPonto();
+					campeonato.getJogadoresCampeonato().get(indexJogador).getSequencia().getSequenciaCores().clear();
+					playSequencia();
+				}
+				
+				else {
+					if(indexJogador == campeonato.getJogadoresCampeonato().size() - 1) {
+						
+						ordenaJogadoresPorPontos();
+						geraRelatorio(); 
+						tabbedPane.setSelectedIndex(3);
+					}
+						
+					
+					else {
+						System.out.println("Sequencia jogador: " + campeonato.getJogadoresCampeonato().get(indexJogador).getSequencia().getSequenciaCores());
+						System.out.println("Errou!");
+						sequencia.getSequenciaCores().clear();
+						sequencia = new Sequencia();
+						indexJogador++;
+						lblJogadorAtual.setText("Jogador: " + campeonato.getJogadoresCampeonato().get(indexJogador).getNome());
+						playSequencia();
+					}
+					
+				}
+			}
+		}, 2000);
+		
 		
 	}
+	
+	public void addToSequenciaJogador(int idCor) {
+
+		campeonato.getJogadoresCampeonato().get(indexJogador).getSequencia().addToSequencia(idCor);
+		
+	}
+	
+	public void geraRelatorio () {
+		int i = 1;
+		relatorio += "<html>";
+		//<html>Hello World!<br/>blahblahblah</html>
+		for (Jogador jo : campeonato.getJogadoresCampeonato()) {
+			
+			relatorio += i + "º: " + jo.getNome() + " com " + jo.getPontos() + " pontos <br/>";
+			
+			i++;
+		}
+		relatorio += "</html>";
+		lblTextoRelatorio.setText(relatorio);
+		
+	}
+	
+	public void ordenaJogadoresPorPontos() {
+		
+		Collections.sort(campeonato.getJogadoresCampeonato(), new Comparator<Jogador>() {
+
+			@Override
+			public int compare(Jogador o1, Jogador o2) {
+				
+				return o2.getPontos() - o1.getPontos();
+			}
+		});
+		
+	}
+	
+	public void playSequencia() {
+		
+		Timer timer = new Timer();
+		indexSequencia = 0;
+
+		sequencia.addRandomToSequencia();
+
+		System.out.println("Jogador: " + campeonato.getJogadoresCampeonato().get(indexJogador).getNome());
+		System.out.println(sequencia.getSequenciaCores());
+		
+		TimerTask piscaBotao = new TimerTask() {
+
+			@Override
+			public void run() {
+				if (indexSequencia < sequencia.getSequenciaCores().size()) {
+					
+					switch(sequencia.getSequenciaCores().get(indexSequencia)) {
+					
+						case 1: {
+							lblTabuleiro.setIcon(new ImageIcon(geniusView.class.getResource(("/files/01VerdePressionado.png"))));
+							break;
+						}
+						case 2: {
+							lblTabuleiro.setIcon(new ImageIcon(geniusView.class.getResource(("/files/02AmareloPressionado.png"))));
+							break;
+						}
+						case 3: {
+							lblTabuleiro.setIcon(new ImageIcon(geniusView.class.getResource(("/files/03AzulPressionado.png"))));
+							break;
+						}
+						case 4: {
+							lblTabuleiro.setIcon(new ImageIcon(geniusView.class.getResource(("/files/04VermelhoPressionado.png"))));
+							break;
+						}
+					}
+					indexSequencia++;
+				
+				}
+				
+				else {
+					lblTabuleiro.setIcon(new ImageIcon(geniusView.class.getResource(("/files/00Neutro.png"))));
+					timer.cancel();
+				}
+			
+			}
+		};
+		
+		timer.scheduleAtFixedRate(piscaBotao, 1000, 1000);
+		
+	}	
 }
